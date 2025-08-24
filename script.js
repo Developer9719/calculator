@@ -1,8 +1,6 @@
 const calculatorContainer = document.querySelector('.calculatorContainer');
 const calculatorField = document.querySelector('.calculatorField');
-let numberValue = 0;
-let userNumbers = [];
-let userOperands = [];
+let expression = '';
 
 // Initialize calculator display
 calculatorField.textContent = '0';
@@ -14,47 +12,60 @@ const calculatorValues = {
 }
 
 // Create number buttons
-for (i = 0; i < calculatorValues.numbers.length; i++) {
-    if(numberValue === 0) {
-        numberValue = 1;
-    } else if (numberValue === 10) {
-        numberValue = 0;
-    } 
+for (let i = 0; i < calculatorValues.numbers.length; i++) {
     const numberButton = document.createElement('button');
     numberButton.classList.add('numberButton');
-    numberButton.classList.add(numberValue);
     numberButton.textContent = calculatorValues.numbers[i];
     calculatorContainer.appendChild(numberButton);
-    numberButton.addEventListener('click', () => {
-        userNumbers.push([calculatorValues.numbers[i]]);
-        if(calculatorField.textContent === '0') {
-            calculatorField.textContent = calculatorValues.numbers[i];
-        } else if(calculatorField.textContent !== '0') {
-            calculatorField.textContent += calculatorValues.numbers[i];
-        }
-    });
-
-    numberValue++;
 }
+
 // Create operator buttons
-for (i = 0; i < calculatorValues.operators.length; i++) {
+for (let i = 0; i < calculatorValues.operators.length; i++) {
     const operatorButton = document.createElement('button');
     operatorButton.classList.add('operatorButton');
-    operatorButton.addEventListener('click', () => {
-        userOperands.push(calculatorValues.operators[i]);
-        calculatorField.textContent = '';
-    });
-    if(calculatorValues.operators[i] === '+') {
-        operatorButton.classList.add('plus');
-    } else if(calculatorValues.operators[i] === '-') {
-        operatorButton.classList.add('minus');
-    } else if(calculatorValues.operators[i] === '*') {
-        operatorButton.classList.add('multiply');
-    } else if(calculatorValues.operators[i] === '/') {
-        operatorButton.classList.add('divide');
-    } else if(calculatorValues.operators[i] === '=') {
-        operatorButton.classList.add('equals');
-    }
     operatorButton.textContent = calculatorValues.operators[i];
     calculatorContainer.appendChild(operatorButton);
+}
+
+// Add All Clear (AC) button
+const clearButton = document.createElement('button');
+clearButton.classList.add('clearButton');
+clearButton.textContent = 'AC';
+calculatorContainer.appendChild(clearButton);
+
+// Add click event listeners to each button
+for (let i = 0; i < calculatorContainer.children.length; i++) {
+    calculatorContainer.children[i].addEventListener('click', function(event) {
+        const buttonValue = event.target.textContent;
+        if (buttonValue === 'AC') {
+            expression = '';
+            updateUI();
+        } else if (buttonValue === '=') {
+            calculate();
+        } else {
+            expression += buttonValue;
+            updateUI();
+        }
+    });
+}
+
+function updateUI() {
+    calculatorField.textContent = expression || '0';
+}
+
+function calculate() {
+    try {
+        // Only allow numbers and operators
+        if (/^[0-9+\-*/.]+$/.test(expression)) {
+            const result = Function('"use strict";return (' + expression + ')')();
+            calculatorField.textContent = result;
+            expression = result.toString();
+        } else {
+            calculatorField.textContent = 'Error';
+            expression = '';
+        }
+    } catch {
+        calculatorField.textContent = 'Error';
+        expression = '';
+    }
 }
