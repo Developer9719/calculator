@@ -1,6 +1,8 @@
 const calculatorContainer = document.querySelector('.calculatorContainer');
 const calculatorField = document.querySelector('.calculatorField');
 let numberValue = 0;
+let userNumbers = [];
+let userOperands = [];
 
 // Initialize calculator display
 calculatorField.textContent = '0';
@@ -22,6 +24,7 @@ for (i = 0; i < calculatorValues.numbers.length; i++) {
     numberButton.classList.add(numberValue);
     numberButton.textContent = calculatorValues.numbers[i];
     calculatorContainer.appendChild(numberButton);
+
     numberValue++;
 }
 
@@ -45,5 +48,19 @@ for (i = 0; i < calculatorValues.operators.length; i++) {
 
 function calculate() {
     // Perform calculation based on user input
+
+    /**
+     * When user pushes a button it displays the number pushed on the calculatorField to the right
+     * of any previous numbers pushed and it stores the number in a userNumbers array. (Each complete
+     * number is a new array inside a multi-dimensional array)
+     */
+
+    /** When user pushes an operator it stores the operator in a userOperands array and erases the
+     * number from the calculatorField to allow for the user to input more numbers.
+     */
+
+    /** When user pushes equals it pulls the values out of the arrays and performs the calculations
+     * then writes the result back to the calculatorField
+     */
     
 }
