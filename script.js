@@ -13,6 +13,7 @@ const calculatorValues = {
     operators: ['+', '-', '*', '/', '=']
 }
 
+// Create number buttons
 for (i = 0; i < calculatorValues.numbers.length; i++) {
     if(numberValue === 0) {
         numberValue = 1;
@@ -24,13 +25,25 @@ for (i = 0; i < calculatorValues.numbers.length; i++) {
     numberButton.classList.add(numberValue);
     numberButton.textContent = calculatorValues.numbers[i];
     calculatorContainer.appendChild(numberButton);
+    numberButton.addEventListener('click', () => {
+        userNumbers.push([calculatorValues.numbers[i]]);
+        if(calculatorField.textContent === '0') {
+            calculatorField.textContent = calculatorValues.numbers[i];
+        } else if(calculatorField.textContent !== '0') {
+            calculatorField.textContent += calculatorValues.numbers[i];
+        }
+    });
 
     numberValue++;
 }
-
+// Create operator buttons
 for (i = 0; i < calculatorValues.operators.length; i++) {
     const operatorButton = document.createElement('button');
     operatorButton.classList.add('operatorButton');
+    operatorButton.addEventListener('click', () => {
+        userOperands.push(calculatorValues.operators[i]);
+        calculatorField.textContent = '';
+    });
     if(calculatorValues.operators[i] === '+') {
         operatorButton.classList.add('plus');
     } else if(calculatorValues.operators[i] === '-') {
@@ -44,23 +57,4 @@ for (i = 0; i < calculatorValues.operators.length; i++) {
     }
     operatorButton.textContent = calculatorValues.operators[i];
     calculatorContainer.appendChild(operatorButton);
-}
-
-function calculate() {
-    // Perform calculation based on user input
-
-    /**
-     * When user pushes a button it displays the number pushed on the calculatorField to the right
-     * of any previous numbers pushed and it stores the number in a userNumbers array. (Each complete
-     * number is a new array inside a multi-dimensional array)
-     */
-
-    /** When user pushes an operator it stores the operator in a userOperands array and erases the
-     * number from the calculatorField to allow for the user to input more numbers.
-     */
-
-    /** When user pushes equals it pulls the values out of the arrays and performs the calculations
-     * then writes the result back to the calculatorField
-     */
-    
 }
